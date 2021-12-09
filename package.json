@@ -1,0 +1,16 @@
+{
+  "name": "flight_booking_app_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amadeus": "^5.7.1",
+    "express": "^4.17.1"
+  }
+}
