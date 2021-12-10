@@ -3,8 +3,8 @@ import bodyPaser from "body-parser";
 import Amadeus from "amadeus";
 
 const amadeus = new Amadeus({
-    clientId: 'YOUR-API-KEY',
-	clientSecret: 'YOUR-API-SECRET',
+    clientId:    'FtG94LuvBZCeLFPDaOKtBR3xg2IG1VBu',
+    clientSecret: 'FakaG6DpAMCbvaFT'
 });
 
 const app = express();
@@ -28,19 +28,23 @@ app.get(`/city-and-airport-search/:parameter`, (req, res) => {
 		});
 });
 
+
+
 app.post(`/flight-search`, (req, res) => {
 
-    departure = req.body.departure;
-    arrival = req.body.arrival;
-    locationDeparture = req.body.locationDeparture;
-    locationArrival = req.body.locationArrival;
+    
+
+    const originCode = req.body.originCode;
+    const destinationCode = req.body.destinationCode;
+    const dateOfDeparture = req.body.dateOfDeparture
+
 
     // Find the cheapest flights
     amadeus.shopping.flightOffersSearch.get({
-        originLocationCode: `${locationDeparture}`,
-        destinationLocationCode: `${locationArrival}`,
-        departureDate: `${departure}`,
-        adults: '2',
+        originLocationCode: `${originCode}`,
+        destinationLocationCode: `${destinationCode}`,
+        departureDate: `${dateOfDeparture}`,
+        adults: '1',
         max: '7'
     }).then(function (response) {
         res.send(response.result);
@@ -49,36 +53,39 @@ app.post(`/flight-search`, (req, res) => {
     });
     });
 
-app.post(`/flight-comfirmation`, (req, res) => {
 
-    flight = req.body;
+app.post(`/flight-confirmation`, (req, res) => {
 
+    const flight = req.body.flight
+    
+    // Confirm availability and price
     amadeus.shopping.flightOffers.pricing.post(
-          JSON.stringify({
+        JSON.stringify({
             'data': {
-              'type': 'flight-offers-pricing',
-              'flightOffers': `${flight}`,
+                'type': 'flight-offers-pricing',
+                'flightOffers': [flight],
             }
-          })
-        )
-      }).then(function (response) {
-        res.send(response.result);
-      }).catch(function (response) {
-        res.send(response);
-      });
+        })
+    ).then(function (response) {
+            res.send(response.result);
+        }).catch(function (response) {
+            res.send(response)
+        })
+    
+})
 
 
-  app.post(`/flight-booking`, (req, res) => {
+app.post(`/flight-booking`, (req, res) => {
 
       // Book a flight 
 
-      let inputFlightCreateOrder = req.body;
+    const flight = req.body.flight;
 
 amadeus.booking.flightOrders.post(
       JSON.stringify({
         'data': {
           'type': 'flight-order',
-          flightOffers: [inputFlightCreateOrder],
+          'flightOffers': [flight],
           'travelers': [{
             "id": "1",
             "dateOfBirth": "1982-01-16",
@@ -110,12 +117,12 @@ amadeus.booking.flightOrders.post(
           }]
         }
       })
-    );
-  }).then(function (response) {
-    console.log(response);
+    ).then(function (response) {
+    res.send(response.result);
   }).catch(function (response) {
-    console.error(response);
+    res.send(response);
   });
 
+});
 
 app.listen(PORT, () => console.log(`Server is running on port: http://localhost:${5000}`));
