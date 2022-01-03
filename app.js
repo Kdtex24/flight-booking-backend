@@ -1,10 +1,11 @@
 import express from "express";
 import bodyPaser from "body-parser";
 import Amadeus from "amadeus";
+import cors from "cors"
 
 const amadeus = new Amadeus({
-    clientId: 'YOUR-API-KEY',
-    clientSecret: 'YOUR-API-SECRET',
+    clientId: 'FtG94LuvBZCeLFPDaOKtBR3xg2IG1VBu',
+    clientSecret: 'FakaG6DpAMCbvaFT',
 
 });
 
@@ -12,6 +13,10 @@ const app = express();
 const PORT = 5000;
 
 app.use(bodyPaser.json());
+
+app.use(cors({
+    origin: 'http://localhost:4200'
+}));
 
 app.get(`/city-and-airport-search/:parameter`, (req, res) => {
 	const parameter = req.params.parameter;
