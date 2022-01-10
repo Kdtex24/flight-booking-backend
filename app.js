@@ -1,6 +1,6 @@
 import express from "express";
-import bodyPaser from "body-parser";
 import Amadeus from "amadeus";
+import bodyParser from "body-parser"
 import cors from "cors"
 
 const amadeus = new Amadeus({
@@ -12,7 +12,9 @@ const amadeus = new Amadeus({
 const app = express();
 const PORT = 5000;
 
-app.use(bodyPaser.json());
+app.use(bodyParser.json())
+
+
 
 app.use(cors({
     origin: 'http://localhost:4200'
@@ -23,7 +25,7 @@ app.get(`/city-and-airport-search/:parameter`, (req, res) => {
 	// Which cities or airports start with ’r'?
 	amadeus.referenceData.locations
 		.get({
-			keyword: `${parameter}`,
+			keyword: parameter,
 			subType: Amadeus.location.any,
 		})
 		.then(function (response) {
@@ -43,8 +45,7 @@ app.post(`/flight-search`, (req, res) => {
     const originCode = req.body.originCode;
     const destinationCode = req.body.destinationCode;
     const dateOfDeparture = req.body.dateOfDeparture
-
-
+    
     // Find the cheapest flights
     amadeus.shopping.flightOffersSearch.get({
         originLocationCode: `${originCode}`,
