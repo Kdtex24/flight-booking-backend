@@ -4,8 +4,8 @@ import bodyParser from "body-parser"
 import cors from "cors"
 
 const amadeus = new Amadeus({
-    clientId: 'YOUR-API-KEY',
-    clientSecret: 'YOUR-API-SECRET',
+  clientId: 'YOUR-API-KEY',
+  clientSecret: 'YOUR-API-SECRET',
 });
 
 const app = express();
@@ -37,7 +37,7 @@ app.get(`/city-and-airport-search/:parameter`, (req, res) => {
 
 
 
-app.post(`/flight-search`, (req, res) => {
+app.get(`/flight-search`, (req, res) => {
 
     
 
@@ -47,9 +47,9 @@ app.post(`/flight-search`, (req, res) => {
     
     // Find the cheapest flights
     amadeus.shopping.flightOffersSearch.get({
-        originLocationCode: `${originCode}`,
-        destinationLocationCode: `${destinationCode}`,
-        departureDate: `${dateOfDeparture}`,
+        originLocationCode: originCode,
+        destinationLocationCode: destinationCode,
+        departureDate: dateOfDeparture,
         adults: '1',
         max: '7'
     }).then(function (response) {
@@ -85,7 +85,8 @@ app.post(`/flight-booking`, (req, res) => {
 
       // Book a flight 
 
-    const flight = req.body.flight;
+    const flight = req.body.flight; 
+    const name = req.body.name
 
 amadeus.booking.flightOrders.post(
       JSON.stringify({
@@ -96,8 +97,8 @@ amadeus.booking.flightOrders.post(
             "id": "1",
             "dateOfBirth": "1982-01-16",
             "name": {
-              "firstName": "JORGE",
-              "lastName": "GONZALES"
+              "firstName": name.first,
+              "lastName": name.last
             },
             "gender": "MALE",
             "contact": {
