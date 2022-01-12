@@ -41,9 +41,9 @@ app.get(`/flight-search`, (req, res) => {
 
     
 
-    const originCode = req.body.originCode;
-    const destinationCode = req.body.destinationCode;
-    const dateOfDeparture = req.body.dateOfDeparture
+    const originCode = req.query.originCode;
+    const destinationCode = req.query.destinationCode;
+    const dateOfDeparture = req.query.dateOfDeparture
     
     // Find the cheapest flights
     amadeus.shopping.flightOffersSearch.get({
@@ -132,4 +132,4 @@ amadeus.booking.flightOrders.post(
 
 });
 
-app.listen(PORT, () => console.log(`Server is running on port: http://localhost:${5000}`));
+app.listen(PORT, () => console.log(`Server is running on port: http://localhost:${PORT}`));
